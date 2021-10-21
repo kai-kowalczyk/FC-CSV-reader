@@ -16,13 +16,13 @@ class CSVReader:
         #print(changes)
         self.cwd = Path.cwd()
         self.filetype = self.set_filetype()
-        print(self.filetype)
+        #print(self.filetype)
         self.validated = self.validate_source()
               
         
 
     def validate_source(self):
-        print(self.path)
+        #print(self.path)
         if Path(self.path).exists():
             if Path(self.path).is_file():
                 if self.filetype not in self.ALLOWED_EXTENSIONS:
@@ -43,23 +43,23 @@ class CSVReader:
                 return 'invalid_path'
 
     def set_filetype(self):
-        print('*', Path(self.filename).suffix[1:])
+        #print('*', Path(self.filename).suffix[1:])
         return Path(self.filename).suffix[1:]
 
 
 
     def show_files_in_dir(self):
         if self.validated == 'wrong_ext':
-            #print('show - wrong_ext')
+            print('show - wrong_ext')
             print(sorted(Path(self.parent_path).glob('*.csv')))
         elif self.validated == 'valid_path':
-            #print('show - valid path')
+            print('show - valid path')
             print(sorted(Path(self.path).glob('*.csv')))
         elif self.validated == 'valid_parent_path':
-            #print('show - valid parent path')
+            print('show - valid parent path')
             print(sorted(Path(self.parent_path).glob('*.csv')))
         else:
-            #print('show - invalid_path')
+            print('show - invalid_path')
             print(sorted(Path(self.cwd).glob('*.csv')))
 
     def validate_change(self):
@@ -68,7 +68,15 @@ class CSVReader:
             row_index = int(splitted_element[0])
             column_index = int(splitted_element[1])
             change_value = splitted_element[2]
-            print(row_index, column_index, change_value)        
+            return row_index, column_index, change_value      
 
     def mod_file(self):
-        pass
+        print('mod')
+        self.validate_change()
+        with open(self.path, 'r', newline='') as file:
+            reader = csv.reader(file)
+            file_data = []
+            for row in reader:
+                file_data.append(row)
+            print(file_data)
+            
